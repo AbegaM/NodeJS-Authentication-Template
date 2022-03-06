@@ -1,10 +1,12 @@
 const express = require("express"); 
 const axios = require("axios").default
+require('dotenv').config()
+
 
 const app = express();
 
-const clientId = "d95d2adf9701dd1d3ae4";
-const clientSecret = "134e43e0c8fab1a548d51dbb53dd26e8433ec01f";
+const clientId = process.env.CLIENT_ID
+const clientSecret = process.env.CLIENT_SECRET;
 const githubOauthURI = "https://github.com/login/oauth/authorize";
 const githubAccessTokenAPI = "https://github.com/login/oauth/access_token"
 const redirectURI = "http://localhost:7000/callback";
