@@ -12,32 +12,47 @@ const signinWithGithub = async ({ data }) => {
 };
 
 const githubCallback = async ({ data, param, query }) => {
-  const user = await getUserDataFromGithubApi(query.code);
-  const githubUser = await db.find({ type: "user", "github.id": user.id });
+  const githubUser = await getUserDataFromGithubApi(query.code);
+  const user = await db.find({ type: "user", "github.id": githubUser.id });
 
   if (query.state === env.github.signupState) {
-    //signup
-    if (githubUser.length > 0) {
-      throw new Error("This user is already registered with Github");
-    }
-    const userInfo = {
-      type: "user",
-      github: { id: user.id, name: user.name, email: user.email },
-      google: { id: "", name: "", email: "" },
-      facebook: { id: "", name: "", email: "" },
-      twitter: { id: "", name: "", email: "" },
-    };
-    const { id } = await db.save(userInfo);
-    const token = await helper.generateToken({ id }, "48H");
+    const token = await registerUser(user, githubUser);
     return { action: "send", data: { token } };
   } else {
-    //signin
-    if (githubUser.length === 0) {
-      throw new Error("This user is not registered");
-    }
-    const token = await helper.generateToken({ id: githubUser[0]._id }, "48H");
+    const token = await login(user);
     return { action: "send", data: { token } };
   }
+};
+
+const registerUser = async (user, githubUser) => {
+  if (user.length > 0) {
+    throw new Error("This user is already registered with Github");
+  }
+  const userInfo = {
+    type: "user",
+    github: {
+      id: githubUser.id,
+      name: githubUser.name,
+      email: githubUser.email,
+    },
+    google: { id: "", name: "", email: "" },
+    facebook: { id: "", name: "", email: "" },
+    twitter: { id: "", name: "", email: "" },
+  };
+
+  const { id } = await db.save(userInfo);
+  const token = await helper.generateToken({ id }, "48H");
+  return token;
+};
+
+const login = async (user) => {
+  if (user.length === 0) {
+    throw new Error(
+      "You can't login with Github, please signup with Github first"
+    );
+  }
+  const token = await helper.generateToken({ id: user[0]._id }, "48H");
+  return token;
 };
 
 const buildRedirectUri = (state) => {
