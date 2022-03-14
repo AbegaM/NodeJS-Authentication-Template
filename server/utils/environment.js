@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 module.exports = {
-  server: { port: process.env.PORT, secret: process.env.SERVER_SECRET },
+  server: { port: process.env.SERVER_PORT, secret: process.env.SERVER_SECRET },
   github: {
     mainApi: "https://api.github.com",
     oauthAPI: "https://github.com/login/oauth/authorize",
