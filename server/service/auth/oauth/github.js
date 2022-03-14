@@ -76,11 +76,7 @@ const getUserDataFromGithubApi = async (code) => {
   return user.data;
 };
 
-const testApi = async ({ data }) => {
-  console.log("test api");
-
-  return { action: "send", data: { test: "hello" } };
-};
+const testApi = async ({ data }) => {};
 
 module.exports = {
   signupWithGithub,
