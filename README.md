@@ -151,9 +151,55 @@ GITHUB_SIGNIN_STATE
 
   5. When a request is fired to our callback API, the controller checkes if the users Github ID is registered in the PouchDB database and if it is already registered it will throw an error but if the users is not registered it will save the users Github information in the PouchDB local database. 
 
-  
+     ```js
+     // server/service/oauth/github.js
+     
+     const githubCallback = async ({ data, param, query }) => {
+       const githubUser = await getUserDataFromGithubApi(query.code);
+       const user = await db.find({ type: "user", "github.id": githubUser.id });
+     
+       if (query.state === env.github.signupState) {
+         const token = await registerUser(user, githubUser);
+         return { action: "send", data: { token } };
+       } else {
+         const token = await login(user);
+         return { action: "send", data: { token } };
+       }
+     };
+     
+     const registerUser = async (user, githubUser) => {
+       if (user.length > 0) {
+         throw new Error("This user is already registered with Github");
+       }
+       const userInfo = {
+         type: "user",
+         github: {
+           id: githubUser.id,
+           name: githubUser.name,
+           email: githubUser.email,
+         },
+         google: { id: "", name: "", email: "" },
+         facebook: { id: "", name: "", email: "" },
+         twitter: { id: "", name: "", email: "" },
+       };
+     
+       const { id } = await db.save(userInfo);
+       const token = await helper.generateToken({ id }, "48H");
+       return token;
+     };
+     
+     const login = async (user) => {
+       if (user.length === 0) {
+         throw new Error(
+           "You can't login with Github, please signup with Github first"
+         );
+       }
+       const token = await helper.generateToken({ id: user[0]._id }, "48H");
+       return token;
+     };
+     ```
 
-  
+  6. As seen in the code, the githubCallback function is triggered by Github and when it is triggered it first gets the users information from the Github API and the function will execute either the regisiter function or the login function
 
   
 
