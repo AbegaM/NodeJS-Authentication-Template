@@ -88,3 +88,28 @@ GITHUB_SIGNIN_STATE
 3. [PouchDB](https://pouchdb.com/)
 
 ## Explanation 
+
+* The goal of this project is to create different authentication methods in a NodeJS application, and as we know there are many ways we can implement authentication in a NodeJS app and this can be 
+  1. Token based authentication 
+  2. Cookie based authentication 
+  3. OAuth 
+  4. Auth0 
+
+### OAuth 
+
+* This protocol was never been created to implement authentication, originally it was designed to authorize two different applications. 
+
+* As an example, lets take Heroku, as we know Heroku is a hosting service which is used to host web applications, if you have used this service before you have seen that it implements a continuous deployment by pulling your latest code from your Github account, this means every time you push your code to your main branch Heroku can be triggered and can build your latest code to a production environment. 
+
+* For this to happen you need to allow Heroku to access your account on behalf of you, and giving a third party application your credentials would not be a good idea, so this is when OAuth comes to the picture, using OAuth your Heroku account can get a privilege to pull the latest code from your Github account. 
+
+  ![oauth-heroku](./images/oauth_heroku.png)
+
+* The diagram shows how your Heroku account can access your Github account on behalf of you, here is how the flow works 
+
+  1. The user gets to his Heroku account and will connect Github for CI/CD 
+  2. The Heroku app will send a request to Githubs OAuth authorization server, to access the account 
+  3. The Github OAuth server asks if the user is Heroku can access the account 
+  4. If the user approved the request then Github will provide an access token for Heroku to access the Github API
+
+* Note that the Heroku service will only be given a limited access of the Github resource and in this cane it can only pull the latest code from your main branch
