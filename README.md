@@ -115,4 +115,46 @@ GITHUB_SIGNIN_STATE
   3. The Github OAuth server asks if the user is Heroku can access the account 
   4. If the user approved the request then Github will provide an access token for Heroku to access the Github API
 
-* Note that the Heroku service will only be given a limited access of the Github resource and in this cane it can only pull the latest code from your main branch
+* Note that the Heroku service will only be given a limited access of the Github resource and in this cane it can only pull the latest code from your main branch 
+
+#### How can we use OAuth to authenticate with Github
+
+* We can use the OpenID connect standard to create an application in which our users can signup and signin using Github. 
+
+##### Signup with Github flow
+
+* If we don't want to create a signup feature for our users, we can let the users to be registered using their Github account, here is the flow 
+
+  1. The user will send a signup request to our backend API 
+
+     ```
+     GET http://localhost:7000/api/auth/signup/github
+     ```
+
+  2. When the users send a GET request to the above API, our app will redirect the users to Githubs OAuth server 
+
+     ```
+     https://github.com/login/oauth/authorize
+     ```
+
+  3. Github will get our request and it will ask the user to allow our application to access the Github API 
+
+     ![authorize](./images/oauth_authorize.png)
+
+  
+
+  4. When the user authorizes our app, Github automatically first a GET request to our callback URL 
+
+     ```
+     GET https://localhost:7000/api/auth/callback/github
+     ```
+
+  5. When a request is fired to our callback API, the controller checkes if the users Github ID is registered in the PouchDB database and if it is already registered it will throw an error but if the users is not registered it will save the users Github information in the PouchDB local database. 
+
+  
+
+  
+
+  
+
+  
