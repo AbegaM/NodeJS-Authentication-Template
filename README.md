@@ -92,7 +92,7 @@ GITHUB_SIGNIN_STATE
 * The goal of this project is to create different authentication methods in a NodeJS application, and as we know there are many ways we can implement authentication in a NodeJS app and this can be 
   1. Token based authentication 
   2. Cookie based authentication 
-  3. Two factor authentication (@FA)
+  3. Two factor authentication (2FA)
   4. Passport based authentication
   5. OAuth 
   6. Auth0 
