@@ -96,7 +96,7 @@ GITHUB_SIGNIN_STATE
   4. Passport based authentication
   5. OAuth 
   6. Auth0 
-  7. 
+   
 
 ### OAuth 
 
@@ -121,7 +121,7 @@ GITHUB_SIGNIN_STATE
 
 * We can use the OpenID connect standard to create an application in which our users can signup and signin using Github. 
 
-##### Signup with Github flow
+##### Signup and signin flow with Github
 
 * If we don't want to create a signup feature for our users, we can let the users to be registered using their Github account, here is the flow 
 
